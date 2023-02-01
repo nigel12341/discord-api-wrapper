@@ -16,7 +16,6 @@ async function exchangeAccessToken(client_id, client_secret, code, redirect_uri)
             code: code,
             grant_type: 'authorization_code',
             redirect_uri: redirect_uri,
-            scope: 'identify',
         }),
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -25,7 +24,7 @@ async function exchangeAccessToken(client_id, client_secret, code, redirect_uri)
     if (response.ok) {
         return await response.json();
     } else {
-        return null;
+        return response.status + " " + response.statusText;
     }
 }
 
@@ -53,7 +52,7 @@ async function refreshAccessToken(client_id, client_secret, refresh_token) {
     if (response.ok) {
         return await response.json();
     } else {
-        return null;
+        return response.status + " " + response.statusText;
     }
 }
 
@@ -72,14 +71,32 @@ async function getLoggedInUserInformation(access_token) {
     if (response.ok) {
         return await response.json();
     } else {
-        return null;
+        return response.status + " " + response.statusText;
     }
 }
 
+/**
+ * Get the guilds of the authorized user
+ * @param access_token
+ * @returns {Promise<List|any>}
+ */
+async function getCurrentUserGuilds(access_token) {
+    const response = await fetch('https://discord.com/api/users/@me/guilds', {
+        headers: {
+            authorization: `Bearer ${access_token}`,
+        },
+    });
+    if (response.ok) {
+        return await response.json();
+    } else {
+        return response.status + " " + response.statusText;
+    }
+}
 
 
 module.exports = {
     exchangeAccessToken: exchangeAccessToken,
     refreshAccessToken: refreshAccessToken,
-    getLoggedInUserInformation: getLoggedInUserInformation
+    getLoggedInUserInformation: getLoggedInUserInformation,
+    getCurrentUserGuilds: getCurrentUserGuilds
 };
