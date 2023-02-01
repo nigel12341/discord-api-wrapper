@@ -1,0 +1,27 @@
+{
+  "name": "discord-api-wrapper",
+  "version": "1.2.1",
+  "description": "Interact with the discord API easier.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nigel12341/discord-api-wrapper/"
+  },
+  "bugs": {
+    "url": "https://github.com/nigel12341/discord-api-wrapper/issues"
+  },
+  "keywords": [
+    "discord",
+    "api",
+    "discord-api",
+    "discord-oauth2",
+    "discord-oauth",
+    "discord-api-wrapper"
+  ],
+  "author": "Nigel Christiaans <nigel@nigelchristiaans.nl>",
+  "license": "MIT",
+  "homepage": "https://github.com/nigel12341/discord-api-wrapper/"
+}
