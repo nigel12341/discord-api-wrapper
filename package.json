@@ -23,5 +23,8 @@
   ],
   "author": "Nigel Christiaans <nigel@nigelchristiaans.nl>",
   "license": "MIT",
-  "homepage": "https://github.com/nigel12341/discord-api-wrapper/"
+  "homepage": "https://github.com/nigel12341/discord-api-wrapper/",
+  "engines": {
+    "node": ">=17.5.0"
+  }
 }
