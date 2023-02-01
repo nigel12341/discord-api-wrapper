@@ -24,6 +24,8 @@ async function exchangeAccessToken(client_id, client_secret, code, redirect_uri)
     if (response.ok) {
         return await response.json();
     } else {
+        console.error("exchangeAccessToken api request failed: " + response.status + " " + response.statusText +
+        "\nThis is probably because your access token is invalid. Try to refresh it.");
         return response.status + " " + response.statusText;
     }
 }
@@ -52,6 +54,8 @@ async function refreshAccessToken(client_id, client_secret, refresh_token) {
     if (response.ok) {
         return await response.json();
     } else {
+        console.error("refreshAccessToken api request failed: " + response.status + " " + response.statusText +
+            "\nThis is probably because your access token is invalid. Try to refresh it.");
         return response.status + " " + response.statusText;
     }
 }
@@ -71,6 +75,8 @@ async function getLoggedInUserInformation(access_token) {
     if (response.ok) {
         return await response.json();
     } else {
+        console.error("getLoggedInUserInformation api request failed: " + response.status + " " + response.statusText +
+            "\nThis is probably because your access token is invalid. Try to refresh it.");
         return response.status + " " + response.statusText;
     }
 }
@@ -78,7 +84,7 @@ async function getLoggedInUserInformation(access_token) {
 /**
  * Get the guilds of the authorized user
  * @param access_token
- * @returns {Promise<List|any>}
+ * @returns {Promise<Array|any>}
  */
 async function getCurrentUserGuilds(access_token) {
     const response = await fetch('https://discord.com/api/users/@me/guilds', {
@@ -89,6 +95,29 @@ async function getCurrentUserGuilds(access_token) {
     if (response.ok) {
         return await response.json();
     } else {
+        console.error("getCurrentUserGuilds api request failed: " + response.status + " " + response.statusText +
+            "\nThis is probably because your access token is invalid. Try to refresh it.");
+        return response.status + " " + response.statusText;
+    }
+}
+
+/**
+ * Get the guild member object of the authorized user for a specific server
+ * @param access_token
+ * @param guild_id
+ * @returns {Promise<Object|string>}
+ */
+async function getCurrentUserGuildMembers(access_token, guild_id) {
+    const response = await fetch(`https://discord.com/api/users/@me/guilds/${guild_id}/member`, {
+        headers: {
+            authorization: `Bearer ${access_token}`,
+        },
+    });
+    if (response.ok) {
+        return await response.json();
+    } else {
+        console.error("getCurrentUserGuildMembers api request failed: " + response.status + " " + response.statusText +
+            "\nThis is probably because your access token is invalid. Try to refresh it.");
         return response.status + " " + response.statusText;
     }
 }
@@ -98,5 +127,6 @@ module.exports = {
     exchangeAccessToken: exchangeAccessToken,
     refreshAccessToken: refreshAccessToken,
     getLoggedInUserInformation: getLoggedInUserInformation,
-    getCurrentUserGuilds: getCurrentUserGuilds
+    getCurrentUserGuilds: getCurrentUserGuilds,
+    getCurrentUserGuildMembers: getCurrentUserGuildMembers
 };
