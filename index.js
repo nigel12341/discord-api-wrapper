@@ -122,11 +122,49 @@ async function getCurrentUserGuildMembers(access_token, guild_id) {
     }
 }
 
+/**
+ * Get the icon url of a guild from its icon hash
+ * @param guild_id
+ * @param icon_hash
+ * @returns {Promise<string>}
+ * @see https://discord.com/developers/docs/reference#image-formatting
+ */
+async function getGuildIcon(guild_id, icon_hash) {
+    const response = await fetch(`https://cdn.discordapp.com/icons/${guild_id}/${icon_hash}.png`);
+    if (response.ok) {
+        return response.url;
+    } else{
+        console.error("getGuildIcon api request failed: " + response.status + " " + response.statusText +
+            "\nThis is probably because the guildID or iconHash is invalid.");
+        return response.status + " " + response.statusText;
+    }
+}
+
+/**
+ * Get the avatar url of a user from its avatar hash
+ * @param user_id
+ * @param avatar_hash
+ * @returns {Promise<string>}
+ * @see https://discord.com/developers/docs/reference#image-formatting
+ */
+async function getAvatar(user_id, avatar_hash) {
+    const response = await fetch(`https://cdn.discordapp.com/avatars/${user_id}/${avatar_hash}.png`);
+    if (response.ok) {
+        return response.url;
+    } else{
+        console.error("getAvatar api request failed: " + response.status + " " + response.statusText +
+            "\nThis is probably because the user_id or avatar_hash is invalid.");
+        return response.status + " " + response.statusText;
+    }
+}
+
 
 module.exports = {
     exchangeAccessToken: exchangeAccessToken,
     refreshAccessToken: refreshAccessToken,
     getLoggedInUserInformation: getLoggedInUserInformation,
     getCurrentUserGuilds: getCurrentUserGuilds,
-    getCurrentUserGuildMembers: getCurrentUserGuildMembers
+    getCurrentUserGuildMembers: getCurrentUserGuildMembers,
+    getGuildIcon: getGuildIcon,
+    getAvatar: getAvatar
 };
