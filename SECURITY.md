@@ -11,4 +11,4 @@ currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-To report a security vulnerability do not open a github issue. Instead email me at nigel@nigelchristiaans.nl!
+To report a security vulnerability do not open a github issue. Instead email me at nigel@nigelchristiaans.nl or report it [here](https://github.com/nigel12341/discord-api-wrapper/security/advisories)!
