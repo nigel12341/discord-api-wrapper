@@ -64,6 +64,10 @@ getGuildIcon(guild_id, icon_hash)
 // Get the user avatar url using the user_id and avatar_hash
 // You get the avatar hash from the getLoggedInUserInformation method
 getAvatar(user_id, avatar_hash)
+
+// Get the basic guild information using the access_token and guild_id
+// NOTE you do not get the full guild object, only the basic information because of a discord limitation using the OAUTH2 access_code
+getGuildInfo(access_token, guild_id)
 ```
 
 ## Author
