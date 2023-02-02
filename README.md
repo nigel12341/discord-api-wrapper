@@ -37,6 +37,10 @@ npm install discord-api-wrapper
 ```sh
 const discordApiWrapper = require('discord-api-wrapper');
 ```
+or
+```js
+const { specificFunction } = require('discord-api-wrapper');
+```
 
 ### Methods
 
@@ -49,6 +53,9 @@ refreshAccessToken(client_id, client_secret, refresh_token)
 
 // Get the logged in user information using the access_token
 getLoggedInUserInformation(access_token)
+
+// Get the logged in user connections using the access_token
+getLoggedInUserConnections(access_token)
 
 // Get all the guilds the logged in user is in using the access_token
 getCurrentUserGuilds(access_token)
@@ -67,7 +74,20 @@ getAvatar(user_id, avatar_hash)
 
 // Get the basic guild information using the access_token and guild_id
 // NOTE you do not get the full guild object, only the basic information because of a discord limitation using the OAUTH2 access_code
+// Use the getGuildById method to get the full guild object but this requires a bot token and the bot to be in that server
 getGuildInfo(access_token, guild_id)
+
+// Method to let the user join a guild
+// NOTE You need a bot token to use this method
+// NOTE The bot needs to be in the server you want the user to join with create instant invite permission
+// NOTE The application needs to have the guilds.join scope
+// Nick is optional
+joinGuildByUserId(bot_token, user_id, guild_id, access_token, nick)
+
+// Method to get a full guild object of a specific server
+// NOTE You need a bot token to use this method
+// NOTE The bot needs to be in the server you are trying to get
+getGuildById(guild_id, bot_token)
 ```
 
 ## Author
