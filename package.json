@@ -26,8 +26,5 @@
   "homepage": "https://github.com/nigel12341/discord-api-wrapper/",
   "engines": {
     "node": ">=17.5.0"
-  },
-  "devDependencies": {
-    "git-cliff": "^1.1.2"
   }
 }
