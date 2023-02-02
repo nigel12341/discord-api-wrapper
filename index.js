@@ -82,6 +82,26 @@ async function getLoggedInUserInformation(access_token) {
 }
 
 /**
+ * Get the connections of the logged-in user
+ * @param access_token
+ * @returns {Promise<Array|string>}
+ */
+async function getLoggedInUserConnections(access_token) {
+    const response = await fetch('https://discord.com/api/users/@me/connections', {
+        headers: {
+            authorization: `Bearer ${access_token}`,
+        },
+    });
+    if (response.ok) {
+        return await response.json();
+    } else {
+        console.error("getLoggedInUserConnections api request failed: " + response.status + " " + response.statusText +
+            "\nThis is probably because your access token is invalid. Try to refresh it.");
+        return response.status + " " + response.statusText;
+    }
+}
+
+/**
  * Get the guilds of the authorized user
  * @param access_token
  * @returns {Promise<Array|any>}
@@ -182,5 +202,6 @@ module.exports = {
     getCurrentUserGuildMembers: getCurrentUserGuildMembers,
     getGuildIcon: getGuildIcon,
     getAvatar: getAvatar,
-    getGuildInfo: getGuildInfo
+    getGuildInfo: getGuildInfo,
+    getLoggedInUserConnections: getLoggedInUserConnections
 };
