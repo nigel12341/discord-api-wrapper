@@ -223,6 +223,44 @@ async function getGuildById(guild_id, bot_token) {
     }
 }
 
+/**
+ * Join the OAUTH2 user to a guild by their user id
+ * If join is successful it will return a server member object
+ * If the user is already in the guild it will return User is already in the guild!
+ * @note This is a bot only endpoint!
+ * @note The bot has to be in the guild you are trying to join and has to have create instant invite permissions
+ * @param bot_token
+ * @param user_id
+ * @param guild_id
+ * @param access_token
+ * @param nick (optional)
+ * @returns {Promise<Object|string>}
+ */
+async function joinGuildByUserId(bot_token, user_id, guild_id, access_token, nick) {
+    if(!nick){
+        nick = null;
+    }
+    let response = await fetch(`https://discord.com/api/guilds/${guild_id}/members/${user_id}`, {
+        method: "PUT",
+        headers: {
+            authorization: `Bot ${bot_token}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            access_token: access_token,
+            nick: nick
+        }),
+    });
+    if(response.status === 201){
+        return await response.json();
+    } else if (response.status === 204) {
+        return "User is already in the guild!";
+    } else {
+        return "Error: " + response.status + " " + response.statusText;
+    }
+
+}
+
 module.exports = {
     exchangeAccessToken: exchangeAccessToken,
     refreshAccessToken: refreshAccessToken,
@@ -233,5 +271,6 @@ module.exports = {
     getAvatar: getAvatar,
     getGuildInfo: getGuildInfo,
     getLoggedInUserConnections: getLoggedInUserConnections,
-    getGuildById: getGuildById
+    getGuildById: getGuildById,
+    joinGuildByUserId: joinGuildByUserId
 };
