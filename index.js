@@ -122,6 +122,21 @@ async function getCurrentUserGuildMembers(access_token, guild_id) {
     }
 }
 
+async function getGuildInfo(access_token, guild_id) {
+    const userGuildsArray = await getCurrentUserGuilds(access_token)
+    if(userGuildsArray instanceof Array){
+        const guild = userGuildsArray.find((guild) => guild.id === guild_id);
+        if(guild){
+            return guild;
+        } else {
+            return "Error: getGuildInfo did not find the guild in the array that matches the provided id!\n Your ID is probably invalid. Please check it.";
+        }
+
+    } else {
+        return "Error: getCurrentUserGuilds did not return an array so something went wrong!";
+    }
+}
+
 /**
  * Get the icon url of a guild from its icon hash
  * @param guild_id
@@ -166,5 +181,6 @@ module.exports = {
     getCurrentUserGuilds: getCurrentUserGuilds,
     getCurrentUserGuildMembers: getCurrentUserGuildMembers,
     getGuildIcon: getGuildIcon,
-    getAvatar: getAvatar
+    getAvatar: getAvatar,
+    getGuildInfo: getGuildInfo
 };
