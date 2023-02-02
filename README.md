@@ -16,7 +16,15 @@
 
 > Interact with the discord API easier.
 
+This is a wrapper for the discord API. It is still in development and not all endpoints are implemented yet. If you want to help, feel free to make a pull request.
+Use the methods instead of manually making requests to the API. This will make it easier to use the API and you don't have to worry about the API changes.
+
+
 ### 🏠 [Homepage](https://github.com/nigel12341/discord-api-wrapper/)
+
+### 📝 [Discord OAUTH2 API Documentation](https://discord.com/developers/docs/topics/oauth2)
+### 📝 [Discord User API Documentation](https://discord.com/developers/docs/resources/user)
+### 📝 [Discord Guild API Documentation](https://discord.com/developers/docs/resources/guild)
 
 ## Install
 
@@ -28,6 +36,34 @@ npm install discord-api-wrapper
 
 ```sh
 const discordApiWrapper = require('discord-api-wrapper');
+```
+
+### Methods
+
+```js
+// Get the access_token from the code you got from the discord oauth2 redirect
+exchangeAccessToken(client_id, client_secret, code, redirect_uri)
+
+// Refresh the access_token by using the refresh_token
+refreshAccessToken(client_id, client_secret, refresh_token)
+
+// Get the logged in user information using the access_token
+getLoggedInUserInformation(access_token)
+
+// Get all the guilds the logged in user is in using the access_token
+getCurrentUserGuilds(access_token)
+
+// Get the guild member object for the logged in user for a specific guild using the access_token and guild_id
+getCurrentUserGuildMembers(access_token, guild_id)
+
+// Get the guild icon url using the guild_id and icon_hash
+// You get the guild icon hash from the getCurrentUserGuilds method and filtering the guilds
+// NOTE: Future update to the package will include a method to get a specific guild so you dont have to filter
+getGuildIcon(guild_id, icon_hash)
+
+// Get the user avatar url using the user_id and avatar_hash
+// You get the avatar hash from the getLoggedInUserInformation method
+getAvatar(user_id, avatar_hash)
 ```
 
 ## Author
@@ -45,9 +81,6 @@ Contributions, issues and feature requests are welcome!<br />Feel free to check 
 
 Give a ⭐️ if this project helped you!
 
-<a href="https://www.patreon.com/nigelchr">
-  <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160" >
-</a>
 
 ## 📝 License
 
