@@ -193,6 +193,35 @@ async function getAvatar(user_id, avatar_hash) {
     }
 }
 
+/**
+ * Get the full guild object ofa guild by its id
+ * You need to provide a bot token for this to work and the bot has to be in the server you are trying to fetch
+ * @NOTE This is a bot only endpoint!
+ * @param guild_id
+ * @param bot_token
+ * @returns {Promise<Object|String>}
+ * @constructor
+ */
+async function getGuildById(guild_id, bot_token) {
+    let response = await fetch(`https://discord.com/api/guilds/${guild_id}`, {
+        headers: {
+            authorization: `Bot ${bot_token}`,
+        }
+    });
+    response = await response.json();
+
+    if(response instanceof Object){
+        return response;
+    }
+
+    if(response.message.includes("401: Unauthorized")) {
+        return "Error: The bot token you provided is invalid. Please check it.";
+    } else if (response.message.includes("Unknown Guild")) {
+        return "Error: The guild id you provided is invalid or the bot is not in that guild. Please check it.";
+    } else {
+        return "Unknown Error: " + response.message;
+    }
+}
 
 module.exports = {
     exchangeAccessToken: exchangeAccessToken,
@@ -203,5 +232,6 @@ module.exports = {
     getGuildIcon: getGuildIcon,
     getAvatar: getAvatar,
     getGuildInfo: getGuildInfo,
-    getLoggedInUserConnections: getLoggedInUserConnections
+    getLoggedInUserConnections: getLoggedInUserConnections,
+    getGuildById: getGuildById
 };
