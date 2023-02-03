@@ -352,6 +352,185 @@ async function getGuildWebhooks(bot_token, guild_id) {
     }
 }
 
+/**
+ * @description Returns the new webhook object for the given id.
+ * @param webhook_id
+ * @param bot_token
+ * @returns {Promise<any|string>}
+ */
+async function getWebhook(webhook_id, bot_token) {
+    const response = await fetch(`https://discord.com/api/webhooks/${webhook_id}`, {
+        headers: {
+            authorization: `Bot ${bot_token}`
+        }
+    });
+
+    if(response.ok){
+        return await response.json();
+    } else {
+        return "Error: " + response.status + " " + response.statusText;
+    }
+}
+
+/**
+ * @description Returns a webhook object for the given id but does not require authentication and returns no user in the webhook object.
+ * @param webhook_id
+ * @param webhook_token
+ * @returns {Promise<Object|string>}
+ */
+async function getWebhookWithToken(webhook_id, webhook_token) {
+    const response = await fetch(`https://discord.com/api/webhooks/${webhook_id}/${webhook_token}`);
+
+    if(response.ok){
+        return await response.json();
+    } else {
+        return "Error: " + response.status + " " + response.statusText;
+    }
+}
+
+/**
+ * @description Modifies the webhook with the given id. Requires the MANAGE_WEBHOOKS permission. Returns the updated webhook object on success.
+ * @param webhook_id
+ * @param bot_token
+ * @param name
+ * @param channel_id
+ * @param reason
+ * @returns {Promise<any|string>}
+ */
+async function modifyWebhook(webhook_id, bot_token, name, channel_id, reason) {
+    if(!reason){
+        reason = "No reason provided";
+    }
+    const response = await fetch(`https://discord.com/api/webhooks/${webhook_id}`, {
+        method: "PATCH",
+        headers: {
+            authorization: `Bot ${bot_token}`,
+            "Content-Type": "application/json",
+            "X-Audit-Log-Reason": reason
+        },
+        body: JSON.stringify({
+            name: name,
+            channel_id: channel_id
+        })
+    });
+
+    if(response.ok){
+        return await response.json();
+    } else {
+        return "Error: " + response.status + " " + response.statusText;
+    }
+}
+
+/**
+ * @description Modifies the webhook with the given id and token. Returns the updated webhook object on success.
+ * @note does not need authorization
+ * @param webhook_id
+ * @param webhook_token
+ * @param name
+ * @param channel_id
+ * @param reason
+ * @returns {Promise<any|string>}
+ */
+async function modifyWebhookWithToken(webhook_id, webhook_token, name, channel_id, reason) {
+    if(!reason){
+        reason = "No reason provided";
+    }
+    const response = await fetch(`https://discord.com/api/webhooks/${webhook_id}/${webhook_token}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "X-Audit-Log-Reason": reason
+        },
+        body: JSON.stringify({
+            name: name,
+            channel_id: channel_id
+        })
+    });
+
+    if(response.ok){
+        return await response.json();
+    } else {
+        return "Error: " + response.status + " " + response.statusText;
+    }
+}
+
+/**
+ * @description Deletes the webhook permanently. Requires the MANAGE_WEBHOOKS permission. Returns a 204 on success.
+ * @param webhook_id
+ * @param bot_token
+ * @param reason
+ * @returns {Promise<number|String>}
+ */
+async function deleteWebhook(webhook_id, bot_token, reason) {
+    if(!reason){
+        reason = "No reason provided";
+    }
+    const response = await fetch(`https://discord.com/api/webhooks/${webhook_id}`, {
+        method: "DELETE",
+        headers: {
+            authorization: `Bot ${bot_token}`,
+            "X-Audit-Log-Reason": reason
+        }
+    });
+
+    if(response.status === 204){
+        return response.status;
+    } else {
+        return "Error: " + response.status + " " + response.statusText;
+    }
+}
+
+/**
+ * @description Deletes the webhook permanently. Returns a 204 on success. Does not require authentication.
+ * @param webhook_id
+ * @param webhook_token
+ * @param reason
+ * @returns {Promise<number|string>}
+ */
+async function deleteWebhookWithToken(webhook_id, webhook_token, reason) {
+    if(!reason){
+        reason = "No reason provided";
+    }
+    const response = await fetch(`https://discord.com/api/webhooks/${webhook_id}/${webhook_token}`, {
+        method: "DELETE",
+        headers: {
+            "X-Audit-Log-Reason": reason
+        }
+    });
+
+    if(response.status === 204){
+        return response.status;
+    } else {
+        return "Error: " + response.status + " " + response.statusText;
+    }
+}
+
+/**
+ * @description Executes the webhook with the given id and token. Returns a message object. Fires a Message Create Gateway event.
+ * @param webhook_id
+ * @param webhook_token
+ * @param content
+ * @returns {Promise<object|string>}
+ */
+async function executeWebhook(webhook_id, webhook_token, content) {
+    const response = await fetch(`https://discord.com/api/webhooks/${webhook_id}/${webhook_token}?wait=true`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            content: content
+        })
+    });
+
+    if(response.ok){
+        return await response.json();
+    } else {
+        return "Error: " + response.status + " " + response.statusText;
+    }
+}
+
+
 module.exports = {
     exchangeAccessToken: exchangeAccessToken,
     refreshAccessToken: refreshAccessToken,
@@ -367,5 +546,12 @@ module.exports = {
     listVoiceRegions: listVoiceRegions,
     createWebhook: createWebhook,
     getChannelWebhooks: getChannelWebhooks,
-    getGuildWebhooks: getGuildWebhooks
+    getGuildWebhooks: getGuildWebhooks,
+    getWebhookWithToken: getWebhookWithToken,
+    getWebhook: getWebhook,
+    modifyWebhook: modifyWebhook,
+    modifyWebhookWithToken: modifyWebhookWithToken,
+    deleteWebhook: deleteWebhook,
+    deleteWebhookWithToken: deleteWebhookWithToken,
+    executeWebhook: executeWebhook
 };

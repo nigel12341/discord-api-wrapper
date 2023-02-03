@@ -88,6 +88,49 @@ joinGuildByUserId(bot_token, user_id, guild_id, access_token, nick)
 // NOTE You need a bot token to use this method
 // NOTE The bot needs to be in the server you are trying to get
 getGuildById(guild_id, bot_token)
+
+// Method to make the authorized user join a guild by its id
+// If join is successful it will return a server member object
+// If the user is already in the guild it will return User is already in the guild!
+// You need a bot token to use this method
+joinGuildByUserId(bot_token, user_id, guild_id, access_token, nick)
+
+// Method that returns an array of voice region objects that can be used when setting a voice or stage channel's rtc_region.
+listVoiceRegions(bot_token)
+
+// Method to create a webhook in a channel with a name and a audit log reason.
+// Returns the webhook object on success
+// See https://discord.com/developers/docs/resources/webhook#webhook-resource for webhook functions
+createWebhook(bot_token, channel_id, name, reason)
+
+// Method to get all webhooks in a channel
+// Returns an array of webhook objects
+getChannelWebhooks(bot_token, channel_id)
+
+// Returns an array of webhook objects for every webhook in the specified guild
+getGuildWebhooks(bot_token, guild_id)
+
+// Returns the new webhook object for the given id uses the bot token for authorization
+getWebhook(webhook_id, bot_token)
+
+// Return the new webhook object for the given id and token does not require authorization
+getWebhookWithToken(webhook_id, webhook_token)
+
+// Modifies the webhook with the given id by changing its name and linked channel reason is showed in audit logs. Uses bot token for authorization.
+modifyWebhook(webhook_id, bot_token, name, channel_id, reason)
+
+// Modifies the webhook that was created with the given id and token. Does not require authorization.
+modifyWebhookWithToken(webhook_id, webhook_token, name, channel_id, reason)
+
+// Deletes the webhook with the given id. Requires bot token for authorization.
+deleteWebhook(webhook_id, bot_token, reason)
+
+// Deletes the webhook that was created with the given id and token. Does not require authorization.
+deleteWebhookWithToken(webhook_id, webhook_token, reason)
+
+// Executes webhook with the given id and token. Does not require authorization.
+// NOTE: Will be updated to support more options in the future!
+executeWebhook(webhook_id, webhook_token, content)
 ```
 
 ## Author
