@@ -261,6 +261,97 @@ async function joinGuildByUserId(bot_token, user_id, guild_id, access_token, nic
 
 }
 
+/**
+ * Returns an array of voice region objects that can be used when setting a voice or stage channel's rtc_region.
+ * @param bot_token
+ * @returns {Promise<Array|string>}
+ * @see https://discord.com/developers/docs/resources/voice#list-voice-regions
+ */
+async function listVoiceRegions(bot_token) {
+    const response = await fetch("https://discord.com/api/voice/regions", {
+        headers: {
+            authorization: `Bot ${bot_token}`,
+        }
+    });
+
+    if(response.ok){
+        return await response.json();
+    } else {
+        return "Error: " + response.status + " " + response.statusText;
+    }
+}
+
+/**
+ * Creates a new webhook and returns a webhook object on success. Requires the MANAGE_WEBHOOKS permission.
+ * @note This is a bot only endpoint!
+ * @note An error will be returned if a webhook name (name) is not valid. A webhook name is valid if:
+ *       It does not contain the substring 'clyde' (case-insensitive)
+ *       It follows the nickname guidelines in the Usernames and Nicknames documentation, with an exception that webhook names can be up to 80 characters
+ * @param bot_token
+ * @param channel_id
+ * @param name
+ * @param reason
+ * @returns {Promise<Object|string>}
+ */
+async function createWebhook(bot_token, channel_id, name, reason) {
+    if(!reason){
+        reason = "No reason provided";
+    }
+    const response = await fetch(`https://discord.com/api/channels/${channel_id}/webhooks`, {
+        method: "POST",
+        headers: {
+            authorization: `Bot ${bot_token}`,
+            "Content-Type": "application/json",
+            "X-Audit-Log-Reason": reason
+        },
+        body: JSON.stringify({
+            name: name
+        })
+    });
+
+    if(response.ok){
+        return await response.json();
+    } else {
+        return "Error: " + response.status + " " + response.statusText;
+    }
+}
+
+/**
+ * @description Returns a list of channel webhook objects. Requires the MANAGE_WEBHOOKS permission.
+ * @note This is a bot only endpoint!
+ * @note If no webhooks are found, an empty array is returned.
+ * @param bot_token
+ * @param channel_id
+ * @returns {Promise<Array|string>}
+ */
+async function getChannelWebhooks(bot_token, channel_id) {
+    const response = await fetch(`https://discord.com/api/channels/${channel_id}/webhooks`, {
+        headers: {
+            authorization: `Bot ${bot_token}`,
+        }
+    });
+
+    if(response.ok){
+        return await response.json();
+    } else {
+        return "Error: " + response.status + " " + response.statusText;
+    }
+}
+
+async function getGuildWebhooks(bot_token, guild_id) {
+    const response = await fetch(`https://discord.com/api/guilds/${guild_id}/webhooks`, {
+        headers: {
+            authorization: `Bot ${bot_token}`,
+        }
+    });
+
+    if(response.ok){
+        return await response.json();
+    } else {
+        return "Error: " + response.status + " " + response.statusText;
+    }
+}
+
 module.exports = {
     exchangeAccessToken: exchangeAccessToken,
     refreshAccessToken: refreshAccessToken,
@@ -272,5 +363,9 @@ module.exports = {
     getGuildInfo: getGuildInfo,
     getLoggedInUserConnections: getLoggedInUserConnections,
     getGuildById: getGuildById,
-    joinGuildByUserId: joinGuildByUserId
+    joinGuildByUserId: joinGuildByUserId,
+    listVoiceRegions: listVoiceRegions,
+    createWebhook: createWebhook,
+    getChannelWebhooks: getChannelWebhooks,
+    getGuildWebhooks: getGuildWebhooks
 };
