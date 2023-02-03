@@ -1,6 +1,6 @@
 {
   "name": "discord-api-wrapper",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Interact with the discord API easier.",
   "main": "index.js",
   "scripts": {
